@@ -814,9 +814,10 @@ public class PostCodes implements PostCodesInterface
     
     
     // instance variables
-    Scanner scanner;
-    int firstPostCode;
-    int secondPostCode;
+    private Scanner scanner;
+    private int firstPostCode;
+    private int secondPostCode;
+    private boolean printAllSuburbs;
     
     // methods
 
@@ -827,44 +828,102 @@ public class PostCodes implements PostCodesInterface
 
         // Print the heading
         System.out.print("Tasmanian Postcodes");
+        
+        // Assume that we dont want to print all the suburbs
+        this.printAllSuburbs = false;
     }
     
     public void configure() {
         System.out.print("Print every suburb for each selected postcode [Y/N]: ");
-        String printAllPostCodes = scanner.nextString();
-        if (input == "Y") {
-            this.firstPostCode = 7000;
-            this.secondPostCode = 7470;
-            printTable();
-        }
-        if (input != "N") {
-            System.out.print("...N assumed...");
+        System.out.print("\n");
+        
+        // FIXME: Somthing is wrong here
+        // It is not checking the next string properly
+        String allPostCodes = this.scanner.next();
+
+        if (allPostCodes == "Y") {
+            System.out.print(allPostCodes);
+            this.printAllSuburbs = true;
+        } else if (allPostCodes != "N") {
+            System.out.print("...N assumed...\n");
         }
 
         System.out.print("Enter number of first postcode to print: ");
+        System.out.print("\n");
         this.firstPostCode = scanner.nextInt();
         
         System.out.print("Enter number of last postcode to print: ");
+        System.out.print("\n");
         this.secondPostCode = scanner.nextInt();
 
         if (this.firstPostCode > this.secondPostCode) {
-            throw new CustomException("The first postcode is greater than second postcode");
+            System.out.print("The first postcode is greater than second postcode\n");
         }
         if (this.firstPostCode < 7000) {
-            System.out.print("...7000 assumed...");
+            System.out.print("...7000 assumed...\n");
             this.firstPostCode = 7000;
         }
         if (this.secondPostCode > 7470) {
-            System.out.print("...7470 assumed...");
+            System.out.print("...7470 assumed...\n");
             this.secondPostCode = 7470;
         }
-        
-        printTable();
         
     }
 
     public void printTable() {
+        // 7000\tGlebe
+        for (int currentPostCode = this.firstPostCode; currentPostCode < this.secondPostCode + 1; currentPostCode++) {
+            if (printAllSuburbs) {
+                String[] suburbs = getAllSuburbs(currentPostCode);
+                System.out.print(currentPostCode + "\t");
+                printSuburbs(suburbs);
+            } else {
+                String suburb =  getOneSuburb(currentPostCode);
+                if (suburb != "NULL") {
+                    System.out.print(currentPostCode + "\t" + suburb + "\n");
+                }
+            }
+        }
+    }
 
+    private void printSuburbs(String[] suburbs) {
+        for (int i = 0; i < suburbs.length; i++) {
+            System.out.print(suburbs[i]);
+            if (i != suburbs.length - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.print("\n");
+    }
+    
+    private String getOneSuburb(int postCodeNumber) {
+        for (int i = 0; i < POSTCODES.length; i++) {
+            if (Integer.parseInt(POSTCODES[i][0]) == postCodeNumber) {
+                return POSTCODES[i][1];
+            }
+        }
+        return "NULL"; // FIXME: Hopefuly there is no suburb called "NULL"
+    }
+    
+    private String[] getAllSuburbs(int postCodeNumber) {
+        // Get the size of the suburbs array
+        int size = 0;
+        for (int i = 0; i < POSTCODES.length; i++) {
+            if (Integer.parseInt(POSTCODES[i][0]) == postCodeNumber) {
+                size++;
+            }
+        }
+
+        // Get the suburbs
+        String[] suburbs = new String[size];
+        int idx = 0;
+        for (int i = 0; i < POSTCODES.length; i++) {
+            if (Integer.parseInt(POSTCODES[i][0]) == postCodeNumber) {
+                suburbs[idx] = POSTCODES[i][1];
+                idx++;
+            }
+        }
+        return suburbs;
     }
   
 }
