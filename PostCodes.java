@@ -3,14 +3,13 @@
  *
  * PostCode Finder -- Library Class
  *
- * @author <<Names and Student IDs>>
- * @version <<Date>>
+ * @author Baley Eccles - 652137 and Tyler Robards - 651790
+ * @version 07/03/2025
  * 
  */
 
 
 import java.util.Scanner;
-
 
 public class PostCodes implements PostCodesInterface
 {
@@ -827,7 +826,7 @@ public class PostCodes implements PostCodesInterface
         scanner = new Scanner(System.in);
 
         // Print the heading
-        System.out.print("Tasmanian Postcodes");
+        System.out.print("Tasmanian Postcodes\n");
         
         // Assume that we dont want to print all the suburbs
         this.printAllSuburbs = false;
@@ -837,15 +836,14 @@ public class PostCodes implements PostCodesInterface
         System.out.print("Print every suburb for each selected postcode [Y/N]: ");
         System.out.print("\n");
         
-        // FIXME: Somthing is wrong here
-        // It is not checking the next string properly
-        String allPostCodes = this.scanner.next();
-
-        if (allPostCodes == "Y") {
+        String allPostCodes = this.scanner.nextLine();
+        if (allPostCodes.equals("Y")) {
             System.out.print(allPostCodes);
             this.printAllSuburbs = true;
-        } else if (allPostCodes != "N") {
-            System.out.print("...N assumed...\n");
+        } else {
+            if (!allPostCodes.equals("N")) {
+                System.out.print("...N assumed...\n");
+            }
         }
 
         System.out.print("Enter number of first postcode to print: ");
@@ -875,10 +873,12 @@ public class PostCodes implements PostCodesInterface
         for (int currentPostCode = this.firstPostCode; currentPostCode < this.secondPostCode + 1; currentPostCode++) {
             if (printAllSuburbs) {
                 String[] suburbs = getAllSuburbs(currentPostCode);
-                System.out.print(currentPostCode + "\t");
-                printSuburbs(suburbs);
+                if (suburbs.length > 0) {
+                    System.out.print(currentPostCode + "\t");
+                    printSuburbs(suburbs);
+                }
             } else {
-                String suburb =  getOneSuburb(currentPostCode);
+                String suburb = getOneSuburb(currentPostCode);
                 if (suburb != "NULL") {
                     System.out.print(currentPostCode + "\t" + suburb + "\n");
                 }
