@@ -850,20 +850,22 @@ public class PostCodes implements PostCodesInterface
         System.out.print("\n");
         this.firstPostCode = scanner.nextInt();
         
-        System.out.print("Enter number of last postcode to print: ");
-        System.out.print("\n");
-        this.secondPostCode = scanner.nextInt();
-
-        if (this.firstPostCode > this.secondPostCode) {
-            System.out.print("The first postcode is greater than second postcode\n");
-        }
         if (this.firstPostCode < 7000) {
             System.out.print("...7000 assumed...\n");
             this.firstPostCode = 7000;
         }
+        
+        System.out.print("Enter number of last postcode to print: ");
+        System.out.print("\n");
+        this.secondPostCode = scanner.nextInt();
+
         if (this.secondPostCode > 7470) {
             System.out.print("...7470 assumed...\n");
             this.secondPostCode = 7470;
+        }
+
+        if (this.firstPostCode > this.secondPostCode) {
+            System.out.print("The first postcode is greater than second postcode\n");
         }
         
     }
