@@ -826,7 +826,7 @@ public class PostCodes implements PostCodesInterface
         scanner = new Scanner(System.in);
 
         // Print the heading
-        System.out.print("Tasmanian Postcodes\n");
+        System.out.print("Tasmanian Postcodes\n\n");
         
         // Assume that we dont want to print all the suburbs
         this.printAllSuburbs = false;
