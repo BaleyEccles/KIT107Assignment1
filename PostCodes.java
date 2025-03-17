@@ -809,16 +809,17 @@ public class PostCodes implements PostCodesInterface
         {"7469","Trial Harbour"},
         {"7469","Zeehan"},
         {"7470","Rosebery"}};
+    
     // other final variables
-    
-    
+    private final int FIRST_POSTCODE_NUMBER = 7000;
+    private final int LAST_POSTCODE_NUMBER = 7470;
+
     // instance variables
     private Scanner scanner;
     private int firstPostCode;
     private int secondPostCode;
     private boolean printAllSuburbs;
     
-    // methods
 
     // Constructor
     public PostCodes() {
@@ -831,37 +832,35 @@ public class PostCodes implements PostCodesInterface
         // Assume that we dont want to print all the suburbs
         this.printAllSuburbs = false;
     }
-    
-    public void configure() {
+
+    // methods 
+   public void configure() {
         System.out.print("Print every suburb for each selected postcode [Y/N]: ");
-        System.out.print("\n");
-        
+
         String allPostCodes = this.scanner.nextLine();
-        if (allPostCodes.equals("Y")) {
-            System.out.print(allPostCodes);
+        //System.out.print("\n");
+        char allPostCodesChar = allPostCodes.charAt(0);
+        if (allPostCodesChar == 'Y' || allPostCodesChar == 'y') {
             this.printAllSuburbs = true;
-        } else {
-            if (!allPostCodes.equals("N")) {
-                System.out.print("...N assumed...\n");
-            }
+        } else if (allPostCodesChar != 'N' || allPostCodesChar != 'n') {
+            System.out.print("...N assumed...\n");
+            this.printAllSuburbs = false;
         }
 
         System.out.print("Enter number of first postcode to print: ");
-        System.out.print("\n");
         this.firstPostCode = scanner.nextInt();
         
-        if (this.firstPostCode < 7000) {
+        if (this.secondPostCode > LAST_POSTCODE_NUMBER || this.secondPostCode < FIRST_POSTCODE_NUMBER) {
             System.out.print("...7000 assumed...\n");
-            this.firstPostCode = 7000;
+            this.firstPostCode = FIRST_POSTCODE_NUMBER;
         }
         
         System.out.print("Enter number of last postcode to print: ");
-        System.out.print("\n");
         this.secondPostCode = scanner.nextInt();
 
-        if (this.secondPostCode > 7470) {
+        if (this.secondPostCode > LAST_POSTCODE_NUMBER || this.secondPostCode < FIRST_POSTCODE_NUMBER) {
             System.out.print("...7470 assumed...\n");
-            this.secondPostCode = 7470;
+            this.secondPostCode = LAST_POSTCODE_NUMBER;
         }
 
         if (this.firstPostCode > this.secondPostCode) {
@@ -871,7 +870,6 @@ public class PostCodes implements PostCodesInterface
     }
 
     public void printTable() {
-        // 7000\tGlebe
         for (int currentPostCode = this.firstPostCode; currentPostCode < this.secondPostCode + 1; currentPostCode++) {
             if (printAllSuburbs) {
                 String[] suburbs = getAllSuburbs(currentPostCode);
