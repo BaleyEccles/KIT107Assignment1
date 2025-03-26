@@ -833,13 +833,13 @@ public class PostCodes implements PostCodesInterface
         this.printAllSuburbs = false;
     }
 
-    // methods 
-   public void configure() {
+    // public methods 
+    public void configure() {
+        // Find out if the user wants to print all suburbs
         System.out.print("Print every suburb for each selected postcode [Y/N]: ");
-
         String allPostCodes = this.scanner.nextLine();
-        //System.out.print("\n");
         char allPostCodesChar = allPostCodes.charAt(0);
+        
         if (allPostCodesChar == 'Y' || allPostCodesChar == 'y') {
             this.printAllSuburbs = true;
         } else if (allPostCodesChar != 'N' || allPostCodesChar != 'n') {
@@ -847,14 +847,16 @@ public class PostCodes implements PostCodesInterface
             this.printAllSuburbs = false;
         }
 
+        // Get the lower postcode bound to print suburbs from
         System.out.print("Enter number of first postcode to print: ");
         this.firstPostCode = scanner.nextInt();
         
-        if (this.secondPostCode > LAST_POSTCODE_NUMBER || this.secondPostCode < FIRST_POSTCODE_NUMBER) {
+        if (this.firstPostCode > LAST_POSTCODE_NUMBER || this.firstPostCode < FIRST_POSTCODE_NUMBER) {
             System.out.print("...7000 assumed...\n");
             this.firstPostCode = FIRST_POSTCODE_NUMBER;
         }
-        
+
+        // Get the upper postcode bound to print suburbs from
         System.out.print("Enter number of last postcode to print: ");
         this.secondPostCode = scanner.nextInt();
 
@@ -863,8 +865,10 @@ public class PostCodes implements PostCodesInterface
             this.secondPostCode = LAST_POSTCODE_NUMBER;
         }
 
+        // Throw an error if lowerbound is greater than upperbound
+        // This also could swap the two bounds, but the specification says that the first input must be the smallest postcode.
         if (this.firstPostCode > this.secondPostCode) {
-            System.out.print("The first postcode is greater than second postcode\n");
+            throw new Exception("The first postcode is greater than second postcode\n");
         }
         
     }
@@ -885,26 +889,35 @@ public class PostCodes implements PostCodesInterface
             }
         }
     }
-
+    
+    // private methods
+    // Print all the suburbs
     private void printSuburbs(String[] suburbs) {
         for (int i = 0; i < suburbs.length; i++) {
             System.out.print(suburbs[i]);
+            
+            // handle trailing comma
             if (i != suburbs.length - 1) {
                 System.out.print(", ");
             }
         }
         System.out.print("\n");
     }
-    
+
+    // Gets the first suburb from the suburbs
+    // Returns the string "NULL" if a postcode does not have a suburb
+    // There could be a problem if there is a suburb called "NULL", but in our data set there isn't one.
     private String getOneSuburb(int postCodeNumber) {
         for (int i = 0; i < POSTCODES.length; i++) {
             if (Integer.parseInt(POSTCODES[i][0]) == postCodeNumber) {
                 return POSTCODES[i][1];
             }
         }
-        return "NULL"; // FIXME: Hopefuly there is no suburb called "NULL"
+        // Hopefuly there is no suburb called "NULL" 
+        return "NULL";
     }
-    
+
+    // Returns all the suburbs from the input postcode number
     private String[] getAllSuburbs(int postCodeNumber) {
         // Get the size of the suburbs array
         int size = 0;
