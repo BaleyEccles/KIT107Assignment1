@@ -5,7 +5,10 @@
  *
  * @author Baley Eccles - 652137 and Tyler Robards - 651790
  * @version 07/03/2025
- * 
+ *
+ * @filename PostCodes.java
+ * This code is intended to print the suburbs of Tasmania, based on postcodes.
+ * 50:50 percentage of the work was done by each author
  */
 
 
@@ -834,11 +837,15 @@ public class PostCodes implements PostCodesInterface
     }
 
     // public methods 
-    public void configure() {
+    public void configure()
+    {
+        String allPostCodes;
+        char allPostCodesChar;
+        
         // Find out if the user wants to print all suburbs
         System.out.print("Print every suburb for each selected postcode [Y/N]: ");
-        String allPostCodes = this.scanner.nextLine();
-        char allPostCodesChar = allPostCodes.charAt(0);
+        allPostCodes = this.scanner.nextLine();
+        allPostCodesChar = allPostCodes.charAt(0);
         
         if (allPostCodesChar == 'Y' || allPostCodesChar == 'y') {
             this.printAllSuburbs = true;
@@ -868,12 +875,13 @@ public class PostCodes implements PostCodesInterface
         // Throw an error if lowerbound is greater than upperbound
         // This also could swap the two bounds, but the specification says that the first input must be the smallest postcode.
         if (this.firstPostCode > this.secondPostCode) {
-            throw new Exception("The first postcode is greater than second postcode\n");
+            System.err.println("The first postcode is greater than second postcode\n");
         }
         
     }
 
-    public void printTable() {
+    public void printTable()
+    {
         for (int currentPostCode = this.firstPostCode; currentPostCode < this.secondPostCode + 1; currentPostCode++) {
             if (printAllSuburbs) {
                 String[] suburbs = getAllSuburbs(currentPostCode);
@@ -892,7 +900,8 @@ public class PostCodes implements PostCodesInterface
     
     // private methods
     // Print all the suburbs
-    private void printSuburbs(String[] suburbs) {
+    private void printSuburbs(String[] suburbs)
+    {
         for (int i = 0; i < suburbs.length; i++) {
             System.out.print(suburbs[i]);
             
@@ -907,7 +916,8 @@ public class PostCodes implements PostCodesInterface
     // Gets the first suburb from the suburbs
     // Returns the string "NULL" if a postcode does not have a suburb
     // There could be a problem if there is a suburb called "NULL", but in our data set there isn't one.
-    private String getOneSuburb(int postCodeNumber) {
+    private String getOneSuburb(int postCodeNumber)
+    {
         for (int i = 0; i < POSTCODES.length; i++) {
             if (Integer.parseInt(POSTCODES[i][0]) == postCodeNumber) {
                 return POSTCODES[i][1];
@@ -918,7 +928,8 @@ public class PostCodes implements PostCodesInterface
     }
 
     // Returns all the suburbs from the input postcode number
-    private String[] getAllSuburbs(int postCodeNumber) {
+    private String[] getAllSuburbs(int postCodeNumber)
+    {
         // Get the size of the suburbs array
         int size = 0;
         for (int i = 0; i < POSTCODES.length; i++) {
